@@ -338,7 +338,7 @@ class TC_Ya2YAML < Test::Unit::TestCase
 			nil,
 			'hoge',
 			"abc\nxyz\n",
-			"\xff\xff",
+			(s = "\xff\xff"),
 			true,
 			false,
 			1000,
@@ -353,6 +353,7 @@ class TC_Ya2YAML < Test::Unit::TestCase
 			@struct,
 			@klass,
 		]
+		s.force_encoding("BINARY") if s.respond_to? :force_encoding
 
 		objects.each {|obj|
 			src = case obj.class.to_s
