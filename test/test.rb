@@ -304,25 +304,15 @@ class TC_Ya2YAML < Test::Unit::TestCase
 
 	def test_roundtrip_string
 		chars = "aあ\t\-\?,\[\{\#&\*!\|>'\"\%\@\`.\\ \n\xc2\xa0\xe2\x80\xa8".split('')
-		
-		chars.each {|i|
-			chars.each {|j|
-				chars.each {|k|
-					src = i + j + k
-					y =  src.ya2yaml(
-						:printable_with_syck => true,
-						:escape_b_specific   => true,
-						:escape_as_utf8      => true
-					)
-					r = YAML.load(y)
-					assert_equal(
-						src,
-						r,
-						'string of special characters should round-trip properly'
-					)
-				}
-			}
-		}
+		f = lambda { |r| chars.map { |c| r.map { |rc| c + rc } }.flatten }
+		f[f[f[[""]]]].each do |src|
+			y = src.ya2yaml(
+				:printable_with_syck => true,
+				:escape_b_specific   => true,
+				:escape_as_utf8      => true)
+			r = YAML.load(y)
+			assert_equal(src, r, 'string of special characters should round-trip properly')
+		end
 	end
 
 	# patch by pawel.j.radecki at gmail.com. thanks!
