@@ -8,7 +8,8 @@
 
 class Ya2YAML
 
-	def initialize(options = {})
+	def initialize(opts = {})
+		options = opts.dup
 		options[:indent_size] = 2          if options[:indent_size].to_i <= 0
 		options[:minimum_block_length] = 0 if options[:minimum_block_length].to_i <= 0
 		options.update(

@@ -40,6 +40,14 @@ class TC_Ya2YAML < Test::Unit::TestCase
 	end
 
 	def test_options
+		opt = {:syck_compatible => true}
+		'foobar'.ya2yaml(opt)
+		assert_equal(
+			{:syck_compatible => true},
+			opt,
+			'ya2yaml should not change the option hash'
+		)
+
 		[
 			[
 				{},
