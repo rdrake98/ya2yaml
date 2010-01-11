@@ -279,17 +279,18 @@ class TC_Ya2YAML < Test::Unit::TestCase
 		chars.each {|i|
 			chars.each {|j|
 				chars.each {|k|
-					chars.each {|l|
-						src = i + j + k + l
-						y =  src.ya2yaml(
-							:printable_with_syck => true,
-							:escape_b_specific   => true,
-							:escape_as_utf8      => true
-						)
-#						puts y
-						r = YAML.load(y)
-						assert_equal(src,r)
-					}
+					src = i + j + k
+					y =  src.ya2yaml(
+						:printable_with_syck => true,
+						:escape_b_specific   => true,
+						:escape_as_utf8      => true
+					)
+					r = YAML.load(y)
+					assert_equal(
+						src,
+						r,
+						'string of special characters should round-trip properly'
+					)
 				}
 			}
 		}
