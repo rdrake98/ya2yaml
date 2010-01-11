@@ -254,7 +254,7 @@ class TC_Ya2YAML < Test::Unit::TestCase
 			 '=',
 		 ].each {|c|
 		 	['','hoge'].each {|ext|
-			 	src = c.class == String ? (c + ext) : c
+			 	src = (c.class == String) ? (c + ext) : c
 				y = src.ya2yaml(
 					:escape_as_utf8 => true
 				)
@@ -379,4 +379,3 @@ class TC_Ya2YAML < Test::Unit::TestCase
 
 end
 
-__END__
