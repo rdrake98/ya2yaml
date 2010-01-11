@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+# encoding: UTF-8
 
 # $Id: ya2yaml.rb,v 0.29 2009/02/09 09:01:30 funai Exp funai $
 #
