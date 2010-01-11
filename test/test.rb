@@ -83,9 +83,11 @@ class TC_Ya2YAML < Test::Unit::TestCase
 			],
 		].each {|opt,yaml|
 			y = ["\xc2\x86","a\xe2\x80\xa8b\xe2\x80\xa9c"," abc\nxyz"].ya2yaml(opt)
-#			puts y
-
-			assert_equal(y,yaml)
+			assert_equal(
+				yaml,
+				y,
+				"option #{opt.inspect} should be recognized"
+			)
 		}
 	end
 
@@ -115,8 +117,11 @@ class TC_Ya2YAML < Test::Unit::TestCase
 			}.ya2yaml(
 				:hash_order => hash_order
 			)
-#			p y
-			assert_equal(y,yaml)
+			assert_equal(
+				yaml,
+				y,
+				'hash order should be kept when :hash_order provided'
+			)
 		}
 	end
 
@@ -137,8 +142,11 @@ class TC_Ya2YAML < Test::Unit::TestCase
 			y = src.ya2yaml(
 				:minimum_block_length => 16
 			)
-#			p y
-			assert_equal(y,yaml)
+			assert_equal(
+				yaml,
+				y,
+				'line breaks should be normalized to fit the format.'
+			)
 		}
 	end
 
@@ -148,16 +156,23 @@ class TC_Ya2YAML < Test::Unit::TestCase
 			[Struct.new(:foo).new(123),       "--- !ruby/struct: \n  foo: 123\n",],
 		].each {|src,yaml|
 			y = src.ya2yaml()
-			assert_equal(y,yaml)
+			assert_equal(
+				yaml,
+				y,
+				'ruby struct should be serialized properly'
+			)
 		}
 	end
 
 	def test_roundtrip_single_byte_char
 		 ("\x00".."\x7f").each {|c|
 			y = c.ya2yaml()
-#			puts y
 			r = YAML.load(y)
-			assert_equal((c == "\r" ? "\n" : c),r) # "\r" is normalized as "\n".
+			assert_equal(
+				(c == "\r" ? "\n" : c), # "\r" is normalized as "\n"
+				r,
+				'single byte characters should round-trip properly'
+			)
 		}
 	end
 
@@ -191,12 +206,12 @@ class TC_Ya2YAML < Test::Unit::TestCase
 					:escape_b_specific => true,
 					:escape_as_utf8    => true
 				)
-#				puts y
 				r = YAML.load(y)
 				assert_equal(
-					[c_hex,(c =~ /\xc2\x85/u ? "\n" : c)],
-					[c_hex,r]
-				) # "\N" is normalized as "\n".
+					(c == "\xc2\x85" ? "\n" : c), # "\N" is normalized as "\n"
+					r,
+					"multi byte characters #{c_hex} should round-trip properly"
+				)
 			}
 		}
 	end
@@ -266,9 +281,12 @@ class TC_Ya2YAML < Test::Unit::TestCase
 				y = src.ya2yaml(
 					:escape_as_utf8 => true
 				)
-#				puts y
 				r = YAML.load(y)
-				assert_equal(src,r)
+				assert_equal(
+					src,
+					r,
+					'ambiguous elements should round-trip properly'
+				)
 			}
 		}
 	end
@@ -362,10 +380,13 @@ class TC_Ya2YAML < Test::Unit::TestCase
 			y = src.ya2yaml(
 				:syck_compatible => true
 			)
-#			puts y
 
 			r = YAML.load(y)
-			assert_equal(src,r)
+			assert_equal(
+				src,
+				r,
+				'types other than String should round-trip properly'
+			)
 		}
 	end
 
@@ -395,10 +416,13 @@ class TC_Ya2YAML < Test::Unit::TestCase
 			y = src.ya2yaml(
 				:syck_compatible => true
 			)
-#			puts y
 
 			r = YAML.load(y)
-			assert_equal(src,r)
+			assert_equal(
+				src,
+				r,
+				'various types should round-trip properly'
+			)
 		}
 	end
 
