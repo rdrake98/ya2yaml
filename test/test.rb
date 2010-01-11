@@ -205,15 +205,13 @@ class TC_Ya2YAML < Test::Unit::TestCase
 		].each {|ucs_code|
 			[-1,0,1].each {|ofs|
 				(c = [ucs_code + ofs].pack('U'))
+				next unless c.valid_encoding? if c.respond_to? :valid_encoding?
 				c_hex = c.unpack('H8')
 				y = c.ya2yaml(
 					:escape_b_specific => true,
 					:escape_as_utf8    => true
 				)
 				r = YAML.load(y)
-				if r.respond_to? :force_encoding
-					r.force_encoding('UTF-8')
-				end
 				assert_equal(
 					(c == "\xc2\x85" ? "\n" : c), # "\N" is normalized as "\n"
 					r,
