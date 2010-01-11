@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# $Id: ya2yaml.rb,v 0.26 2007-01-19 20:42:42+09 funai Exp funai $
+# $Id: ya2yaml.rb,v 0.29 2009/02/09 09:01:30 funai Exp funai $
 #
 # Author::    Akira FUNAI
 # Copyright:: Copyright (c) 2006 Akira FUNAI

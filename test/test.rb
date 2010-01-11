@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# $Id: test.rb,v 1.4 2007-01-19 20:41:37+09 funai Exp funai $
+# $Id: test.rb,v 1.6 2009/02/09 09:00:57 funai Exp funai $
 
 $: << (File.dirname(__FILE__) + '/../lib')
 
