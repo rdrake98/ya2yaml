@@ -296,6 +296,22 @@ class TC_Ya2YAML < Test::Unit::TestCase
 		}
 	end
 
+	# patch by pawel.j.radecki at gmail.com. thanks!
+	def test_roundtrip_symbols
+		symbol1 = :"Batman: The Dark Knight - Why So Serious?!"
+		result_symbol1 = YAML.load(symbol1.ya2yaml)
+		assert_equal(symbol1,result_symbol1)
+
+		symbol2 = :"Batman: The Dark Knight - \"Why So Serious?!\""
+		result_symbol2 = YAML.load(symbol2.ya2yaml) 
+		assert_equal(symbol2,result_symbol2)
+
+#		# YAML.load problem: the quotes within the symbol are lost here
+#		symbol3 = :"\"Batman: The Dark Knight - Why So Serious?!\""
+#		result_symbol3 = YAML.load(symbol3.ya2yaml) 
+#		assert_equal(symbol3,result_symbol3)
+	end
+
 	def test_roundtrip_types
 		objects = [
 			[],
