@@ -36,7 +36,7 @@ class TC_Ya2YAML < Test::Unit::TestCase
 		File.open('./t.gif','r') {|f| @gif = f.read}
 
 		@struct = @@struct_klass.new('barbarbar',@@struct_klass.new('baaaar',12345))
-		@klass  = Moo.new('boobooboo',Time.new())
+		@klass  = Moo.new('boobooboo',Time.local(2009,2,9,16,44,10))
 	end
 
 	def test_options
@@ -311,8 +311,8 @@ class TC_Ya2YAML < Test::Unit::TestCase
 			1000.1,
 			-1000,
 			-1000.1,
-			Date.today(),
-			Time.new(),
+			Date.new(2009,2,9),
+			Time.local(2009,2,9,16,35,22),
 			:foo,
 			1..10,
 			/abc\nxyz/i,
@@ -354,7 +354,7 @@ class TC_Ya2YAML < Test::Unit::TestCase
 
 	def test_roundtrip_various
 		[
-			[1,2,['c','d',[[['e']],[]],'f'],3,Time.new(),[[:foo]],nil,true,false,[],{},{[123,223]=>456},{[1]=>2,'a'=>'b','c' => [9,9,9],Time.new() => 'hoge'},],
+			[1,2,['c','d',[[['e']],[]],'f'],3,Time.local(2009,2,9,17,9),[[:foo]],nil,true,false,[],{},{[123,223]=>456},{[1]=>2,'a'=>'b','c' => [9,9,9],Time.local(2009,2,9,17,10) => 'hoge'},],
 			[],
 			{[123,223]=>456},
 			{},
