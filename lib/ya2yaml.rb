@@ -31,8 +31,8 @@ class Ya2YAML
 	private
 
 	def emit(obj,level)
-		case obj.class.to_s
-			when 'Array'
+		case obj
+			when Array
 				if (obj.length == 0)
 					'[]'
 				else
@@ -41,7 +41,7 @@ class Ya2YAML
 						indent + '- ' + emit(o,level + 1)
 					}.join('')
 				end
-			when 'Hash'
+			when Hash
 				if (obj.length == 0)
 					'{}'
 				else
@@ -70,17 +70,17 @@ class Ya2YAML
 						end
 					}.join('')
 				end
-			when 'NilClass'
+			when NilClass
 				'~'
-			when 'String'
+			when String
 				emit_string(obj,level)
-			when 'TrueClass','FalseClass'
+			when TrueClass,FalseClass
 				obj.to_s
-			when 'Fixnum','Bignum','Float'
+			when Fixnum,Bignum,Float
 				obj.to_s
-			when 'Date'
+			when Date
 				obj.to_s
-			when 'Time'
+			when Time
 				offset = obj.gmtoff
 				off_hm = sprintf(
 					'%+.2d:%.2d',
@@ -89,11 +89,11 @@ class Ya2YAML
 				)
 				u_sec = (obj.usec != 0) ? sprintf(".%.6d",obj.usec) : ''
 				obj.strftime("%Y-%m-%d %H:%M:%S#{u_sec} #{off_hm}")
-			when 'Symbol'
+			when Symbol
 				'!ruby/symbol ' + emit_string(obj.to_s,level)
-			when 'Range'
+			when Range
 				'!ruby/range ' + obj.to_s
-			when 'Regexp'
+			when Regexp
 				'!ruby/regexp ' + obj.inspect
 			else
 				case
