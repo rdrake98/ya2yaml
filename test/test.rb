@@ -288,7 +288,7 @@ class TC_Ya2YAML < Test::Unit::TestCase
 			 '=',
 		 ].each {|c|
 		 	['','hoge'].each {|ext|
-			 	src = (c.class == String) ? (c + ext) : c
+				src = (c.class == String) ? (c + ext) : c
 				y = src.ya2yaml(
 					:escape_as_utf8 => true
 				)
@@ -332,12 +332,12 @@ class TC_Ya2YAML < Test::Unit::TestCase
 		assert_equal(symbol1,result_symbol1)
 
 		symbol2 = :"Batman: The Dark Knight - \"Why So Serious?!\""
-		result_symbol2 = YAML.load(symbol2.ya2yaml) 
+		result_symbol2 = YAML.load(symbol2.ya2yaml)
 		assert_equal(symbol2,result_symbol2)
 
 #		# YAML.load problem: the quotes within the symbol are lost here
 #		symbol3 = :"\"Batman: The Dark Knight - Why So Serious?!\""
-#		result_symbol3 = YAML.load(symbol3.ya2yaml) 
+#		result_symbol3 = YAML.load(symbol3.ya2yaml)
 #		assert_equal(symbol3,result_symbol3)
 	end
 
@@ -439,4 +439,3 @@ class TC_Ya2YAML < Test::Unit::TestCase
 	end
 
 end
-
