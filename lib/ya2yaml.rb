@@ -184,7 +184,7 @@ class Ya2YAML
   end
 
   def string_type(str)
-    if str.respond_to?(:valid_encoding?) && !str.valid_encoding?
+    if str.respond_to?(:encoding) && (!str.valid_encoding? || str.encoding == Encoding::ASCII_8BIT)
       return false, false, false, false
     end
     (ucs_codes = str.unpack('U*')) rescue (

@@ -451,4 +451,31 @@ class TC_Ya2YAML < Test::Unit::TestCase
     }
   end
 
+  def test_binary
+    return if RUBY_VERSION < '1.9.0'
+
+    y = nil
+    assert_nothing_raised(
+      "Ya2YAML#string_type should dump 'ASCII-8BIT' strings as '!binary'"
+    ) {
+      y = '日本語'.force_encoding('ASCII-8BIT').ya2yaml
+    }
+    assert_equal(
+      "--- !binary |\n  5pel5pys6Kqe\n\n",
+      y,
+      "Ya2YAML#string_type should dump 'ASCII-8BIT' strings as '!binary'"
+    )
+
+    assert_nothing_raised(
+      "Ya2YAML#string_type should dump strings with invalid encodings as '!binary'"
+    ) {
+      y = '日本語'.encode('EUC-JP').force_encoding('UTF-8').ya2yaml
+    }
+    assert_equal(
+      "--- !binary |\n  xvzL3Ljs\n\n",
+      y,
+      "Ya2YAML#string_type should dump strings with invalid encodings as '!binary'"
+    )
+  end
+
 end
