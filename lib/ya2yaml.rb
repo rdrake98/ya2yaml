@@ -1,9 +1,7 @@
 # encoding: UTF-8
 
-# $Id: ya2yaml.rb, v 0.29 2009/02/09 09:01:30 funai Exp funai $
-#
 # Author::    Akira FUNAI
-# Copyright:: Copyright (c) 2006 Akira FUNAI
+# Copyright:: Copyright (c) 2006-2010 Akira FUNAI
 # License::   MIT License
 
 class Ya2YAML
