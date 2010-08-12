@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-# $Id: ya2yaml.rb,v 0.29 2009/02/09 09:01:30 funai Exp funai $
+# $Id: ya2yaml.rb, v 0.29 2009/02/09 09:01:30 funai Exp funai $
 #
 # Author::    Akira FUNAI
 # Copyright:: Copyright (c) 2006 Akira FUNAI
@@ -25,12 +25,12 @@ class Ya2YAML
 
   def _ya2yaml(obj)
     throw 'set $KCODE to "UTF8".' if (RUBY_VERSION < '1.9.0') && ($KCODE != 'UTF8')
-    '--- ' + emit(obj,1) + "\n"
+    '--- ' + emit(obj, 1) + "\n"
   end
 
   private
 
-  def emit(obj,level)
+  def emit(obj, level)
     case obj
       when Array
         if (obj.length == 0)
@@ -38,7 +38,7 @@ class Ya2YAML
         else
           indent = "\n" + s_indent(level - 1)
           obj.collect {|o|
-            indent + '- ' + emit(o,level + 1)
+            indent + '- ' + emit(o, level + 1)
           }.join('')
         end
       when Hash
@@ -48,35 +48,35 @@ class Ya2YAML
           indent = "\n" + s_indent(level - 1)
           hash_order = @options[:hash_order]
           if (hash_order && level == 1)
-            hash_keys = obj.keys.sort {|x,y|
+            hash_keys = obj.keys.sort {|x, y|
               x_order = hash_order.index(x) ? hash_order.index(x) : Float::MAX
               y_order = hash_order.index(y) ? hash_order.index(y) : Float::MAX
               o = (x_order <=> y_order)
               (o != 0) ? o : (x.to_s <=> y.to_s)
             }
           else
-            hash_keys = obj.keys.sort {|x,y| x.to_s <=> y.to_s }
+            hash_keys = obj.keys.sort {|x, y| x.to_s <=> y.to_s }
           end
           hash_keys.collect {|k|
-            key = emit(k,level + 1)
+            key = emit(k, level + 1)
             if (
               is_one_plain_line?(key) ||
               key =~ /\A(#{REX_BOOL}|#{REX_FLOAT}|#{REX_INT}|#{REX_NULL})\z/x
             )
-              indent + key + ': ' + emit(obj[k],level + 1)
+              indent + key + ': ' + emit(obj[k], level + 1)
             else
               indent + '? ' + key +
-              indent + ': ' + emit(obj[k],level + 1)
+              indent + ': ' + emit(obj[k], level + 1)
             end
           }.join('')
         end
       when NilClass
         '~'
       when String
-        emit_string(obj,level)
-      when TrueClass,FalseClass
+        emit_string(obj, level)
+      when TrueClass, FalseClass
         obj.to_s
-      when Fixnum,Bignum,Float
+      when Fixnum, Bignum, Float
         obj.to_s
       when Date
         obj.to_s
@@ -87,10 +87,10 @@ class Ya2YAML
           (offset / 3600.0).to_i,
           (offset % 3600.0) / 60
         )
-        u_sec = (obj.usec != 0) ? sprintf(".%.6d",obj.usec) : ''
+        u_sec = (obj.usec != 0) ? sprintf(".%.6d", obj.usec) : ''
         obj.strftime("%Y-%m-%d %H:%M:%S#{u_sec} #{off_hm}")
       when Symbol
-        '!ruby/symbol ' + emit_string(obj.to_s,level)
+        '!ruby/symbol ' + emit_string(obj.to_s, level)
       when Range
         '!ruby/range ' + obj.to_s
       when Regexp
@@ -99,45 +99,45 @@ class Ya2YAML
         case
           when obj.is_a?(Struct)
             struct_members = {}
-            obj.each_pair{|k,v| struct_members[k.to_s] = v }
-            '!ruby/struct:' + obj.class.to_s.sub(/^(Struct::(.+)|.*)$/,'\2') + ' ' +
-            emit(struct_members,level + 1)
+            obj.each_pair{|k, v| struct_members[k.to_s] = v }
+            '!ruby/struct:' + obj.class.to_s.sub(/^(Struct::(.+)|.*)$/, '\2') + ' ' +
+            emit(struct_members, level + 1)
           else
             # serialized as a generic object
             object_members = {}
-            obj.instance_variables.each{|k,v|
-              object_members[k.to_s.sub(/^@/,'')] = obj.instance_variable_get(k)
+            obj.instance_variables.each{|k, v|
+              object_members[k.to_s.sub(/^@/, '')] = obj.instance_variable_get(k)
             }
             '!ruby/object:' + obj.class.to_s + ' ' +
-            emit(object_members,level + 1)
+            emit(object_members, level + 1)
         end
     end
   end
 
-  def emit_string(str,level)
-    (is_string,is_printable,is_one_line,is_one_plain_line) = string_type(str)
+  def emit_string(str, level)
+    (is_string, is_printable, is_one_line, is_one_plain_line) = string_type(str)
     if is_string
       if is_printable
         if is_one_plain_line
-          emit_simple_string(str,level)
+          emit_simple_string(str, level)
         else
           (is_one_line || str.length < @options[:minimum_block_length]) ?
-            emit_quoted_string(str,level) :
-            emit_block_string(str,level)
+            emit_quoted_string(str, level) :
+            emit_block_string(str, level)
         end
       else
-        emit_quoted_string(str,level)
+        emit_quoted_string(str, level)
       end
     else
-      emit_base64_binary(str,level)
+      emit_base64_binary(str, level)
     end
   end
 
-  def emit_simple_string(str,level)
+  def emit_simple_string(str, level)
     str
   end
 
-  def emit_block_string(str,level)
+  def emit_block_string(str, level)
     str = normalize_line_break(str)
 
     indent = s_indent(level)
@@ -159,7 +159,7 @@ class Ya2YAML
     '|' + indentation_indicator + chomping_indicator + "\n" + indent + str
   end
 
-  def emit_quoted_string(str,level)
+  def emit_quoted_string(str, level)
     str = yaml_escape(normalize_line_break(str))
     if (str.length < @options[:minimum_block_length])
       str.gsub!(/#{REX_NORMAL_LB}/) { ESCAPE_SEQ_LB[$1] }
@@ -177,37 +177,37 @@ class Ya2YAML
     '"' + str + '"'
   end
 
-  def emit_base64_binary(str,level)
+  def emit_base64_binary(str, level)
     indent = "\n" + s_indent(level)
     base64 = [str].pack('m')
-    '!binary |' + indent + base64.gsub(/\n(?!\z)/,indent)
+    '!binary |' + indent + base64.gsub(/\n(?!\z)/, indent)
   end
 
   def string_type(str)
     if str.respond_to?(:valid_encoding?) && !str.valid_encoding?
-      return false,false,false,false
+      return false, false, false, false
     end
     (ucs_codes = str.unpack('U*')) rescue (
       # ArgumentError -> binary data
-      return false,false,false,false
+      return false, false, false, false
     )
     if (
       @options[:printable_with_syck] &&
       str =~ /\A#{REX_ANY_LB}* | #{REX_ANY_LB}*\z|#{REX_ANY_LB}{2}\z/
     )
       # detour Syck bug
-      return true,false,nil,false
+      return true, false, nil, false
     end
     ucs_codes.each {|ucs_code|
-      return true,false,nil,false unless is_printable?(ucs_code)
+      return true, false, nil, false unless is_printable?(ucs_code)
     }
-    return true,true,is_one_line?(str),is_one_plain_line?(str)
+    return true, true, is_one_line?(str), is_one_plain_line?(str)
   end
 
   def is_printable?(ucs_code)
     # YAML 1.1 / 4.1.1.
     (
-      [0x09,0x0a,0x0d,0x85].include?(ucs_code)      ||
+      [0x09, 0x0a, 0x0d, 0x85].include?(ucs_code)   ||
       (ucs_code <=     0x7e && ucs_code >=    0x20) ||
       (ucs_code <=   0xd7ff && ucs_code >=    0xa0) ||
       (ucs_code <=   0xfffd && ucs_code >=  0xe000) ||
@@ -240,7 +240,7 @@ class Ya2YAML
 
   def normalize_line_break(str)
     # YAML 1.1 / 4.1.4.
-    str.gsub(/(#{REX_CRLF}|#{REX_CR}|#{REX_NEL})/,"\n")
+    str.gsub(/(#{REX_CRLF}|#{REX_CR}|#{REX_NEL})/, "\n")
   end
 
   def yaml_escape(str)
@@ -259,11 +259,11 @@ class Ya2YAML
         when ucs_code == 0x2028 || ucs_code == 0x2029
           ESCAPE_SEQ_LB[c]
         when ucs_code <= 0x7f
-          sprintf('\\x%.2x',ucs_code)
+          sprintf('\\x%.2x', ucs_code)
         when ucs_code <= 0xffff
-          sprintf('\\u%.4x',ucs_code)
+          sprintf('\\u%.4x', ucs_code)
         else
-          sprintf('\\U%.8x',ucs_code)
+          sprintf('\\U%.8x', ucs_code)
       end
     }
   end

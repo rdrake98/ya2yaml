@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
 
-# $Id: test.rb,v 1.6 2009/02/09 09:00:57 funai Exp funai $
+# $Id: test.rb, v 1.6 2009/02/09 09:00:57 funai Exp funai $
 
 $:.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
 
@@ -27,10 +27,10 @@ end if RUBY_VERSION >= "1.9"
 
 class TC_Ya2YAML < Test::Unit::TestCase
 
-  @@struct_klass = Struct::new('Foo',:bar,:buz)
+  @@struct_klass = Struct::new('Foo', :bar, :buz)
   class Moo
-    attr_accessor :val1,:val2
-    def initialize(val1,val2)
+    attr_accessor :val1, :val2
+    def initialize(val1, val2)
       @val1 = val1
       @val2 = val2
     end
@@ -46,7 +46,7 @@ class TC_Ya2YAML < Test::Unit::TestCase
     @text   = File.open('./t.yaml', 'r') { |f| f.read }
     @gif    = File.open('./t.gif', 'rb') { |f| f.read }
     @struct = @@struct_klass.new('barbarbar', @@struct_klass.new('baaaar', 12345))
-    @klass  = Moo.new('boobooboo', Time.local(2009,2,9,16,44,10))
+    @klass  = Moo.new('boobooboo', Time.local(2009, 2, 9, 16, 44, 10))
   end
 
   def test_options
@@ -91,8 +91,8 @@ class TC_Ya2YAML < Test::Unit::TestCase
         {:syck_compatible => true},
         "--- \n- \"\\xc2\\x86\"\n- \"a\\xe2\\x80\\xa8b\\xe2\\x80\\xa9c\"\n- \" abc\\n\\\n    xyz\"\n",
       ],
-    ].each {|opt,yaml|
-      y = ["\xc2\x86","a\xe2\x80\xa8b\xe2\x80\xa9c"," abc\nxyz"].ya2yaml(opt)
+    ].each {|opt, yaml|
+      y = ["\xc2\x86", "a\xe2\x80\xa8b\xe2\x80\xa9c", " abc\nxyz"].ya2yaml(opt)
       assert_equal(
         yaml,
         y,
@@ -112,14 +112,14 @@ class TC_Ya2YAML < Test::Unit::TestCase
         "--- \na: 1\nb: 2\nc: 3\n",
       ],
       [
-        ['c','b','a'],
+        ['c', 'b', 'a'],
         "--- \nc: 3\nb: 2\na: 1\n",
       ],
       [
         ['b'],
         "--- \nb: 2\na: 1\nc: 3\n",
       ],
-    ].each {|hash_order,yaml|
+    ].each {|hash_order, yaml|
       y = {
         'a' => 1,
         'c' => 3,
@@ -137,18 +137,18 @@ class TC_Ya2YAML < Test::Unit::TestCase
 
   def test_normalize_line_breaks
     [
-      ["\n\n\n\n",          "--- \"\\n\\n\\n\\n\"\n",],
-      ["\r\n\r\n\r\n",      "--- \"\\n\\n\\n\"\n",],
-      ["\r\n\n\n",          "--- \"\\n\\n\\n\"\n",],
-      ["\n\r\n\n",          "--- \"\\n\\n\\n\"\n",],
-      ["\n\n\r\n",          "--- \"\\n\\n\\n\"\n",],
-      ["\n\n\n\r",          "--- \"\\n\\n\\n\\n\"\n",],
-      ["\r\r\n\r",          "--- \"\\n\\n\\n\"\n",],
-      ["\r\r\r\r",          "--- \"\\n\\n\\n\\n\"\n",],
-      ["\r\xc2\x85\r\n",    "--- \"\\n\\n\\n\"\n",],
-      ["\r\xe2\x80\xa8\r\n","--- \"\\n\\L\\n\"\n",],
-      ["\r\xe2\x80\xa9\r\n","--- \"\\n\\P\\n\"\n",],
-    ].each {|src,yaml|
+      ["\n\n\n\n",           "--- \"\\n\\n\\n\\n\"\n"],
+      ["\r\n\r\n\r\n",       "--- \"\\n\\n\\n\"\n"],
+      ["\r\n\n\n",           "--- \"\\n\\n\\n\"\n"],
+      ["\n\r\n\n",           "--- \"\\n\\n\\n\"\n"],
+      ["\n\n\r\n",           "--- \"\\n\\n\\n\"\n"],
+      ["\n\n\n\r",           "--- \"\\n\\n\\n\\n\"\n"],
+      ["\r\r\n\r",           "--- \"\\n\\n\\n\"\n"],
+      ["\r\r\r\r",           "--- \"\\n\\n\\n\\n\"\n"],
+      ["\r\xc2\x85\r\n",     "--- \"\\n\\n\\n\"\n"],
+      ["\r\xe2\x80\xa8\r\n", "--- \"\\n\\L\\n\"\n"],
+      ["\r\xe2\x80\xa9\r\n", "--- \"\\n\\P\\n\"\n"],
+    ].each {|src, yaml|
       y = src.ya2yaml(
         :minimum_block_length => 16
       )
@@ -162,9 +162,9 @@ class TC_Ya2YAML < Test::Unit::TestCase
 
   def test_structs
     [
-      [Struct.new('Hoge',:foo).new(123),"--- !ruby/struct:Hoge \n  foo: 123\n",],
-      [Struct.new(:foo).new(123),       "--- !ruby/struct: \n  foo: 123\n",],
-    ].each {|src,yaml|
+      [Struct.new('Hoge', :foo).new(123), "--- !ruby/struct:Hoge \n  foo: 123\n", ],
+      [Struct.new(:foo).new(123),       "--- !ruby/struct: \n  foo: 123\n", ],
+    ].each {|src, yaml|
       y = src.ya2yaml()
       assert_equal(
         yaml,
@@ -209,7 +209,7 @@ class TC_Ya2YAML < Test::Unit::TestCase
       0x100000,
       0x10ffff,
     ].each {|ucs_code|
-      [-1,0,1].each {|ofs|
+      [-1, 0, 1].each {|ofs|
         (c = [ucs_code + ofs].pack('U'))
         next unless c.valid_encoding? if c.respond_to? :valid_encoding?
         c_hex = c.unpack('H8')
@@ -287,7 +287,7 @@ class TC_Ya2YAML < Test::Unit::TestCase
       '2006-09-11 17:28:07.662694 +09:00',
       '=',
     ].each {|c|
-      ['','hoge'].each {|ext|
+      ['', 'hoge'].each {|ext|
         src = (c.class == String) ? (c + ext) : c
         y = src.ya2yaml(
           :escape_as_utf8 => true
@@ -329,16 +329,16 @@ class TC_Ya2YAML < Test::Unit::TestCase
   def test_roundtrip_symbols
     symbol1 = :"Batman: The Dark Knight - Why So Serious?!"
     result_symbol1 = YAML.load(symbol1.ya2yaml)
-    assert_equal(symbol1,result_symbol1)
+    assert_equal(symbol1, result_symbol1)
 
     symbol2 = :"Batman: The Dark Knight - \"Why So Serious?!\""
     result_symbol2 = YAML.load(symbol2.ya2yaml)
-    assert_equal(symbol2,result_symbol2)
+    assert_equal(symbol2, result_symbol2)
 
 #		# YAML.load problem: the quotes within the symbol are lost here
 #		symbol3 = :"\"Batman: The Dark Knight - Why So Serious?!\""
 #		result_symbol3 = YAML.load(symbol3.ya2yaml)
-#		assert_equal(symbol3,result_symbol3)
+#		assert_equal(symbol3, result_symbol3)
   end
 
   def test_roundtrip_types
@@ -357,8 +357,8 @@ class TC_Ya2YAML < Test::Unit::TestCase
       1000.1,
       -1000,
       -1000.1,
-      Date.new(2009,2,9),
-      Time.local(2009,2,9,16,35,22),
+      Date.new(2009, 2, 9),
+      Time.local(2009, 2, 9, 16, 35, 22),
       :foo,
       1..10,
       /abc\nxyz/i,
@@ -404,11 +404,11 @@ class TC_Ya2YAML < Test::Unit::TestCase
 
   def test_roundtrip_various
     [
-      [1,2,['c','d',[[['e']],[]],'f'],3,Time.local(2009,2,9,17,9),[[:foo]],nil,true,false,[],{},{[123,223]=>456},{[1]=>2,'a'=>'b','c' => [9,9,9],Time.local(2009,2,9,17,10) => 'hoge'},],
+      [1, 2, ['c', 'd', [[['e']], []], 'f'], 3, Time.local(2009, 2, 9, 17, 9), [[:foo]], nil, true, false, [], {}, {[123, 223]=>456}, {[1]=>2, 'a'=>'b', 'c' => [9, 9, 9], Time.local(2009, 2, 9, 17, 10) => 'hoge'}, ],
       [],
-      {[123,223]=>456},
+      {[123, 223]=>456},
       {},
-      {'foo' => {1 => {2=>3,4=>5},6 => [7,8]}},
+      {'foo' => {1 => {2=>3, 4=>5}, 6 => [7, 8]}},
       "abc",
       " abc\n def\ndef\ndef\ndef\ndef\n",
       "abc\n def\ndef\n",
@@ -421,9 +421,9 @@ class TC_Ya2YAML < Test::Unit::TestCase
       {"ほげ\nほげ\n ほげ" => 123},
       [["ほげ\nほげ\n ほげ"]],
       "ほげh\x4fge\nほげ\nほげ",
-      [{'ほげ'=>'abc',"ほげ\nほげ"=>'ほげ'},'ほげ',@text],
-      [Date.today,-9.011,0.023,4,-5,{1=>-2,-1=>@text,'_foo'=>'bar','ぬお-ぬお'=>321}],
-      {1=>-2,-1=>@gif,'_foo'=>'bar','ぬお-ぬお'=>321},
+      [{'ほげ'=>'abc', "ほげ\nほげ"=>'ほげ'}, 'ほげ', @text],
+      [Date.today, -9.011, 0.023, 4, -5, {1=>-2, -1=>@text, '_foo'=>'bar', 'ぬお-ぬお'=>321}],
+      {1=>-2, -1=>@gif, '_foo'=>'bar', 'ぬお-ぬお'=>321},
     ].each {|src|
       y = src.ya2yaml(
         :syck_compatible => true
