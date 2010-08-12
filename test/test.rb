@@ -440,4 +440,15 @@ class TC_Ya2YAML < Test::Unit::TestCase
     }
   end
 
+  def test_circular_reference
+    a = []
+    a << a
+    assert_raise(
+      ArgumentError,
+      'Object#ya2yaml should raise ArgumentError when the object includes a circular reference'
+    ) {
+      a.ya2yaml
+    }
+  end
+
 end

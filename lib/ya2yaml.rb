@@ -24,6 +24,8 @@ class Ya2YAML
   def _ya2yaml(obj)
     raise 'set $KCODE to "UTF8".' if (RUBY_VERSION < '1.9.0') && ($KCODE != 'UTF8')
     '--- ' + emit(obj, 1) + "\n"
+  rescue SystemStackError
+    raise ArgumentError, "ya2yaml can't handle circular references"
   end
 
   private
