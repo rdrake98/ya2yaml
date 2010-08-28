@@ -2,12 +2,12 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ya2yaml}
-  s.version = "0.30b"
+  s.version = "0.30"
 
   s.required_rubygems_version = nil if s.respond_to? :required_rubygems_version=
   s.authors = ["Akira FUNAI"]
   s.cert_chain = nil
-  s.date = %q{2010-08-14}
+  s.date = %q{2010-08-28}
   s.email = %q{akira@funai.com}
   s.extra_rdoc_files = ["README.rdoc"]
   s.files = ["lib/ya2yaml.rb", "README.rdoc", "LICENSE", "test/t.gif", "test/t.yaml", "test/test.rb"]
