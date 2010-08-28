@@ -1,6 +1,6 @@
 = Ya2YAML - An UTF8 safe YAML dumper
 
-Project Contact: Akira FUNAI <mailto:funai.akira@gmail.com>
+Project Contact: Akira FUNAI <akira -at- funai -dot- com>
 
 Ya2YAML is "yet another to_yaml". It emits YAML document with complete UTF8 support (string/binary detection, "\u" escape sequences and Unicode specific line breaks). I hope someone might find it useful until Syck/RbYAML come out with UTF8/16 support.
 
