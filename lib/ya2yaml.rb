@@ -131,7 +131,7 @@ class Ya2YAML
         emit_quoted_string(str, level)
       end
     else
-      emit_base64_binary(str, level)
+      str.force_encoding('UTF-8')
     end
   end
 
