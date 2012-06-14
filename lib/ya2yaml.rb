@@ -48,7 +48,7 @@ class Ya2YAML
           indent = "\n" + s_indent(level - 1)
           hash_order = @options[:hash_order]
           if (hash_order && level == 1)
-            hash_keys = obj.keys.sort {|x, y|
+            hash_keys = obj.keys {|x, y|
               x_order = hash_order.index(x) ? hash_order.index(x) : Float::MAX
               y_order = hash_order.index(y) ? hash_order.index(y) : Float::MAX
               o = (x_order <=> y_order)
@@ -57,7 +57,7 @@ class Ya2YAML
           elsif @options[:preserve_order]
             hash_keys = obj.keys
           else
-            hash_keys = obj.keys.sort {|x, y| x.to_s <=> y.to_s }
+            hash_keys = obj.keys {|x, y| x.to_s <=> y.to_s }
           end
           hash_keys.collect {|k|
             key = emit(k, level + 1)
